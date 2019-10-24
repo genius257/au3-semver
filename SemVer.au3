@@ -640,3 +640,24 @@ EndFunc   ;==>_SemVer_Satisfies
 Func _SemVer_Valid($sVer)
 	Return StringRegExp($sVer, $__SVREGEX_VERSION)
 EndFunc   ;==>_SemVer_Valid
+
+#cs
+# Return the highest version in the list that satisfies the range, or null if none of them do.
+#
+# @author Anders Pedersen (genius257)
+#
+# @param array $versions array of versions
+# @param string $range The version number string
+#
+# @return string|null
+#ce
+Func _SemVer_MaxSatisfying($versions, $range)
+    Local $i
+    Local $max = Null
+
+    For $i = 0 To UBound($versions)-1
+        If (Not $max) Or _SemVer_Compare($max, $versions[$i]) = -1 Then $max = $versions[$i]
+    Next
+
+    Return $max
+EndFunc
