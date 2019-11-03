@@ -661,3 +661,11 @@ Func _SemVer_MaxSatisfying($versions, $range)
 
     Return $max
 EndFunc
+
+Func _SemVer_ValidRange($range)
+	#cs
+	# @see https://docs.npmjs.com/misc/semver#range-grammar
+	#ce
+	Local Static $re = '(?(DEFINE)(?<rangeSet>(?&range)((?&logicalOr)(?&range))*)(?<logicalOr>( )*\|\|( )*)(?<range>(?&hyphen)|(?&simple)( (?&simple))*|)(?<hyphen>(?&partial) - (?&partial))(?<simple>(?&primitive)|(?&partial)|(?&tilde)|(?&caret))(?<primitive>(<|>|>=|<=|=)(?&partial))(?<partial>(?&xr)(\.(?&xr)(\.(?&xr)(?&qualifier)?)?)?)(?<xr>x|X|\*|(?&nr))(?<nr>0|[1-9]([0-9])*)(?<tilde>~(?&partial))(?<caret>\^(?&partial))(?<qualifier>(-(?&pre))?(\+(?&build))?)(?<pre>(?&parts))(?<build>(?&parts))(?<parts>(?&part)(\.(?&part))*)(?<part>(?&nr)|[-0-9A-Za-z]+))^(?&rangeSet)$'
+	Return Not Not StringRegExp($range, $re)
+EndFunc
