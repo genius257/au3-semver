@@ -131,23 +131,30 @@ EndFunc   ;==>__SemVer_ConditionParse
 ; Example .......: No
 ; ===============================================================================================================================
 Func __SemVer_Match($aVerA, $sOp, $aVerB)
-	Local Static $mPredicates[]
+	Local $Predicate = Null
 
-	If UBound($mPredicates) = 0 Then
-		; Initialize the map
-		$mPredicates["="] = _SemVer_Eq
-		$mPredicates[">"] = _SemVer_Gt
-		$mPredicates["<"] = _SemVer_Lt
-		$mPredicates[">="] = _SemVer_Gte
-		$mPredicates["<="] = _SemVer_Lte
-		$mPredicates["!="] = _SemVer_Neq
-		$mPredicates["~"] = _SemVer_ReasonablyClose
-		$mPredicates["^"] = _SemVer_Compatible
-	EndIf
+	Switch $sOp
+		Case "="
+			$Predicate = _SemVer_Eq
+		Case ">"
+			$Predicate = _SemVer_Gt
+		Case "<"
+			$Predicate = _SemVer_Lt
+		Case ">="
+			$Predicate = _SemVer_Gte
+		Case "<="
+			$Predicate = _SemVer_Lte
+		Case "!="
+			$Predicate = _SemVer_Neq
+		Case "~"
+			$Predicate = _SemVer_ReasonablyClose
+		Case "^"
+			$Predicate = _SemVer_Compatible
+		Case Else
+			Return SetError(1, 0, 0) ; Operator not recognised
+	EndSwitch
 
-	If $mPredicates[$sOp] = Null Then Return SetError(1, 0, 0) ; Operator not recognised
-
-	Return $mPredicates[$sOp]($aVerA, $aVerB)
+	Return $Predicate($aVerA, $aVerB)
 EndFunc   ;==>__SemVer_Match
 
 ; #INTERNAL_USE_ONLY# ===========================================================================================================
