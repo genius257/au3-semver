@@ -663,6 +663,7 @@ Func _SemVer_MaxSatisfying($versions, $range)
     Local $max = Null
 
     For $i = 0 To UBound($versions)-1
+        If Not _SemVer_Satisfies($versions[$i], $range) Then ContinueLoop
         If (Not $max) Or _SemVer_Compare($max, $versions[$i]) = -1 Then $max = $versions[$i]
     Next
 
